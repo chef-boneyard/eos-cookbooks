@@ -30,6 +30,26 @@ address i.e. `192.168.181.101`.
 The vEOS image installs a switch configured with a management
 interface(`ma1`) and 4 ethernet interfaces (`et1-4`).
 
+EOS 101
+--------
+- EOS provides a default shell (`/usr/bin/Cli`) which looks similar
+  to Cisco IOS.  This is what you get dropped into via ssh so
+  unfortuanely scp won't work.
+- The default installed user/password is `admin` with no password.  In
+  order to login via SSH you'll need to setup a password for the admin
+  user.
+- To get to the useful commands you have to `enable` them by entering
+  `enable`.
+- The commands can be abbreviated (`enable` -> `en`, `show` -> `sh`,
+  ...)
+- Hitting `?` at any point in a command will bring up context sensitive
+  help
+- you can drop into a bash shell by the `bash` command from `Cli`.
+- The bulk of the filesystem is on tmpfs.  If you need to store
+  something across restarts, `/mnt/flash` is persistent.
+
+For more info you can look at a [quick start guide](http://www.aristanetworks.com/docs/Manuals/QS_Modular_BW.pdf) which covers how to get IP networking up and running and setting up login via ssh on the switch or the [full EOS manual](http://www.aristanetworks.com/docs/Manuals/EOS-4.9.5-SysMsgGuide.pdf)
+
 Installing
 ----------
 ### Initial bootstrap
@@ -38,19 +58,49 @@ To initially bootstrap the switch you need setup IP networking for the
 management interface so you can then download whatever else is needed
 from external sources.
 
-Login in console as `admin` with no password
+Login in on the vmware console as `admin` with no password and follow the
+steps below:
 
 ### Setup ip adress and routing
 
+NOTE: Replace `192.168.181.` with whatever subnet `vmnet8` is on for
+your local environment
+
+From `Cli`:
+
     > en
     # config
-    # hostname switch002
     # interface ma1
     # ip address 192.168.181.101/24
     # ip host 192.168.181.101
     # end
+    # ip name-server 192.168.181.2
     # ip route 0.0.0.0/0 192.168.181.2
     # end
+
+You should now have basic networking running, including DNS.  You should
+now be able to do things such as ping/ssh/wget an external host.
+
+### Load a more complete startup-config
+In the `eos-cookbooks` project there is a Rake task `startup-config`
+which generates a more complete startup config with NTP config and some
+other useful pieces.  It is configured with an `admin` user with the
+password `password` so that after loading it you can login in via ssh
+directly.
+
+    [eos-cookbooks]$ rake
+    Using hostname : switch001
+    Using IP Address for switch : 192.168.181.101
+    
+    Generate config file 'startup-config-101'
+
+You can supply a hostname and IP address different from the defaults:
+
+    [eos-cookbooks]$ rake startup-config[myswitch103,103]
+    Using hostname : myswitch103
+    Using IP Address for switch : 192.168.181.103
+
+    Generate config file 'startup-config-103'
 
 ### Installing chef-client package
 
@@ -59,10 +109,12 @@ Login in console as `admin` with no password
     # copy installed-extensions boot-extensions
 
 ### Enable scheduled chef-client run
-# config
-# schedule chef-client interval 5 max-log-files 20 command bash sudo /usr/bin/chef-client -c /persist/local/chef/client.rb
-# end
-#
+We use the scheduled jobs feature of EOS to run chef-client.  Logs will
+be put into `/mnt/flash/scheduled/chef-client`.
+
+    # config
+    # schedule chef-client interval 5 max-log-files 20 command bash sudo /usr/bin/chef-client -c /persist/local/chef/client.rb
+    # end
 
 ### configure chef-client
 
