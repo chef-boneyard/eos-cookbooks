@@ -42,31 +42,21 @@ Login in console as `admin` with no password
 
 ### Setup ip adress and routing
 
-> en
-# config
-# hostname switch002
-# interface ma1
-# ip address 192.168.181.101/24
-# ip host 192.168.181.101
-# end
-# ip route 0.0.0.0/0 192.168.181.2
-# end
-
-### set clock and ntp
-
-# config
-# clock timezone PST
-# ntp server 0.north-america.pool.ntp.org prefer
-# ntp server 1.north-america.pool.ntp.org
-# ntp server 2.north-america.pool.ntp.org
-# end
-# bash sudo hwclock --localtime  -s
+    > en
+    # config
+    # hostname switch002
+    # interface ma1
+    # ip address 192.168.181.101/24
+    # ip host 192.168.181.101
+    # end
+    # ip route 0.0.0.0/0 192.168.181.2
+    # end
 
 ### Installing chef-client package
 
-# copy http://opscode-omnitruck-release.s3.amazonaws.com/el/6/i686/chef-10.14.0-1.el6.i686.rpm extension:
-# extension chef-10.14.0-1.el6.i686.rpm
-# copy installed-extensions boot-extensions
+    # copy http://opscode-omnitruck-release.s3.amazonaws.com/el/6/i686/chef-10.14.0-1.el6.i686.rpm extension:
+    # extension chef-10.14.0-1.el6.i686.rpm
+    # copy installed-extensions boot-extensions
 
 ### Enable scheduled chef-client run
 # config
