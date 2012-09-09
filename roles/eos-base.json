@@ -1,0 +1,18 @@
+{
+  "name": "eos-base",
+  "description": "Base role for EOS switches",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+    "ohai": {
+      "plugin_path": "/persist/local/chef/plugins"
+    }
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[ohai]"
+  ],
+  "env_run_lists": {
+  }
+}
