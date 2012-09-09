@@ -8,9 +8,9 @@ run chef-client.
 
 Prerequisites
 -------------
-# You need a vEOS Image for VMware Fusion.  Ask Kevin or James if you
+- You need a vEOS Image for VMware Fusion.  Ask Kevin or James if you
   don't have it already.
-# VMware Fusion installed
+- VMware Fusion installed
   You will need to know the IP subnet used for the `vmnet8` interface.
   You can either use `ifconfig` or consult the vmware `dhcpd.conf` at
   `/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf`
@@ -20,10 +20,10 @@ Configuration Information
 You will need the following information given the IP subnet above.  In
 this example we consider the subnet is 192.168.181.0/24.
 
-# The IP of your laptop is `<SUBNET>.1` i.e `192.168.181.1`
-# The IP of the vmware route is `<SUBNET>.2` i.e. `192.168.181.2`.  This
+1. The IP of your laptop is `<SUBNET>.1` i.e `192.168.181.1`
+2. The IP of the vmware route is `<SUBNET>.2` i.e. `192.168.181.2`.  This
   also hosts a ntp server.
-# You should pick an IP address not allocated by DHCP on `vmnet8`.  The
+3. You should pick an IP address not allocated by DHCP on `vmnet8`.  The
   default is to use .128->.254 for DHCP, so for instance .101 is a good
 address i.e. `192.168.181.101`.
 
