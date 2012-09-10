@@ -9,7 +9,7 @@ under VMware Fusion
 
 Install
 -------
-See (INSTALL.md) for more instructions on how to install and configure
+See [INSTALL.md](INSTALL.md) for more instructions on how to install and configure
 chef on EOS.
 
 Ohai
