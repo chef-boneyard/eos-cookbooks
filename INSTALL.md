@@ -32,6 +32,11 @@ interface(`ma1`) and 4 ethernet interfaces (`et1-4`).
 
 EOS 101
 --------
+- EOS is based on Fedora Core 14.  Our EL6 packages work on it just
+  fine.
+- vEOS reports that it runs a x86_86 kernel, but the userland
+  consists of i686 packages.  tl;dr Install an i686 version of
+  cher onto it
 - EOS provides a default shell (`/usr/bin/Cli`) which looks similar
   to Cisco IOS.  This is what you get dropped into via ssh so
   unfortuanely scp won't work.
@@ -81,7 +86,7 @@ From `Cli`:
 You should now have basic networking running, including DNS.  You should
 now be able to do things such as ping/ssh/wget an external host.
 
-### Load a more complete startup-config
+### Load a more complete startup-config (optional but recommended)
 In the `eos-cookbooks` project there is a Rake task `startup-config`
 which generates a more complete startup config with NTP config and some
 other useful pieces.  It is configured with an `admin` user with the
@@ -91,7 +96,7 @@ directly.
     [eos-cookbooks]$ rake
     Using hostname : switch001
     Using IP Address for switch : 192.168.181.101
-    
+
     Generate config file 'startup-config-101'
 
 You can supply a hostname and IP address different from the defaults:
@@ -101,6 +106,13 @@ You can supply a hostname and IP address different from the defaults:
     Using IP Address for switch : 192.168.181.103
 
     Generate config file 'startup-config-103'
+
+To upload, from the EOS Cli
+
+    # scp james@192.168.181.1:~/oc/eos-cookbooks/startup-config-101 startup-config
+    # copy startup-config running-config
+
+You should now be running the configuration you just uploaded.
 
 ### Installing chef-client package
 
@@ -118,11 +130,10 @@ be put into `/mnt/flash/scheduled/chef-client`.
 
 ### configure chef-client
 
-    #bash
-    Arista Networks EOS shell
-    [admin@switch002 ~]$ sudo -s
-    bash-4.1# scp james@192.168.181.1:~/Downloads/jc_arista-validator.pem /persist/local/chef
-    bash-4.1# cd /persist/local/
+    # scp james@192.168.181.1:~/Downloads/jc_arista-validator.pem /persist/local/chef
+    # bash sudo -s mkdir -p /persist/local/chef
+
+    # bash
     bash-4.1# mkdir chef
     bash-4.1# cat > chef/client.rb
     hostname = `hostname -s`.chomp
