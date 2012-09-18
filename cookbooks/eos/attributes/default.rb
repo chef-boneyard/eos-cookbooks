@@ -1,2 +1,2 @@
 
-default['eos']['scripts'] = "/mnt/flash/scripts"
+default['eos']['scripts'] = "/persist/local/chef/scripts"

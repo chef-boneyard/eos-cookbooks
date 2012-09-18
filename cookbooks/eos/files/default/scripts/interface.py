@@ -6,7 +6,7 @@ import sys
 import argparse
 import json
 
-import PyClient
+import PyClient, Tac
 
 #
 # spin up Sysdb configuration
@@ -43,6 +43,9 @@ def get_phy(interface):
 
     for k in CONFIG_KEYS:
         ret[k] = getattr(config(interface), k)
+    ret['rates'] = get_counters(interface, 'rates')
+    ret['statistics'] = get_counters(interface, 'statistics')
+    ret['ethStatistics'] = get_counters(interface, 'ethStatistics')
     return ret
 
 #
@@ -52,7 +55,36 @@ def get_vlan(interface):
     ret = dict()
     for k in CONFIG_KEYS:
         ret[k] = getattr(config(interface), k)
+    ret['rates'] = get_counters(interface, 'rates')
+    ret['statistics'] = get_counters(interface, 'statistics')
     return ret
+
+def get_counters(interface, part):
+    ret = dict()
+    obj = getattr(counters(interface), part)
+    for attrName in obj.attributes:
+	attrValue = get_value(obj, attrName)
+        if attrValue != None:
+            ret[attrName] = attrValue
+    return ret
+
+def get_value(obj, attrName):
+    attr = obj.tacType.type_Attr.attr[attrName]
+    if not attr.readable:
+        return None
+    try:
+        value = getattr(obj, attrName)
+    except Exception, e:
+        return None
+    if attr.isValue:
+        return str(value)
+    return None
+
+def counters(interface):
+    if interface.startswith("Vlan"):
+        return sysdb['interface']['counter']['eth']['vlan'][interface]['current']
+    else:
+        return sysdb['interface']['counter']['eth']['phy'][interface]['current']
 
 def config(interface):
     if interface.startswith("Vlan"):

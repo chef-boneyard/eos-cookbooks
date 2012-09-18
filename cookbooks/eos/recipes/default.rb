@@ -10,7 +10,10 @@
 remote_directory node['eos']['scripts'] do
   owner 'root'
   group 'eosadmin'
-  mode '0770'
+  mode '0775'
+  files_owner 'root'
+  files_group 'eosadmin'
+  files_mode '0775'
   recursive false
   purge true
 end

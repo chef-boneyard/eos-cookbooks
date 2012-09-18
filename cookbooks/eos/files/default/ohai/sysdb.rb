@@ -10,7 +10,7 @@ provides "sysdb"
 sysdb = Mash.new
 
 # Interfaces
-popen4("/mnt/flash/scripts/interface.py --get") do |pid, stdin, stdout, stderr|
+popen4("/persist/local/chef/scripts/interface.py --get") do |pid, stdin, stdout, stderr|
   stdin.close
   parser = Yajl::Parser.new
   sysdb['interface'] = parser.parse(stdout.read)
