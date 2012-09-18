@@ -3,7 +3,6 @@
   "description": "Base role for EOS switches",
   "json_class": "Chef::Role",
   "default_attributes": {
-    "platform_version": "6",
     "ohai": {
       "plugins": {
         "eos": "ohai"
