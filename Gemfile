@@ -2,6 +2,6 @@ source :rubygems
 
 gem "chef"
 gem "rake"
-gem "librarian"
+gem "berkshelf"
 gem "vagrant"
 

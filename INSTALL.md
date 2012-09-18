@@ -130,11 +130,14 @@ be put into `/mnt/flash/scheduled/chef-client`.
 
 ### configure chef-client
 
+You need to upload a `client.rb` for the chef server (we used hosted
+chef) and the validator cert.
+
     # scp james@192.168.181.1:~/Downloads/jc_arista-validator.pem /persist/local/chef
     # bash sudo -s mkdir -p /persist/local/chef
 
     # bash
-    bash-4.1# mkdir chef
+    # sudo -s
     bash-4.1# cat > chef/client.rb
     hostname = `hostname -s`.chomp
     orgname="jc_arista"
