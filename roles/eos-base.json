@@ -9,6 +9,9 @@
         "eos": "ohai"
       },
       "plugin_path": "/persist/local/chef/plugins"
+    },
+    "eos_demo": {
+      "enabled": false
     }
   },
   "override_attributes": {

@@ -9,7 +9,7 @@
 
 # Install helper scripts for ohai and setting switch configuration
 
-remote_directory "/mnt/flash/scripts" do
+remote_directory node['eos']['scripts'] do
   owner 'root'
   group 'eosadmin'
   mode '0755'
