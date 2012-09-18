@@ -17,3 +17,9 @@ else
   end
 end
 
+ohai "reload_sysdb" do
+  action :nothing
+  plugin "sysdb"
+  subscribes :reload, resources(:eos_interface => "Ethernet1")
+end
+
