@@ -2,4 +2,3 @@ metadata.json
 .chef
 .bundle
 bin
-cookbooks/ohai
