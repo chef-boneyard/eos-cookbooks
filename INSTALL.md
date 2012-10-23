@@ -116,7 +116,7 @@ You should now be running the configuration you just uploaded.
 
 ### Installing chef-client package
 
-    # copy http://opscode-omnitruck-release.s3.amazonaws.com/el/6/i686/chef-10.14.2-1.el6.i686.rpm extension:
+    # copy http://opscode-omnitruck-release.s3.amazonaws.com/el/6/i686/chef-10.16.0-1.el6.i686.rpm extension:
     # extension chef-10.14.2-1.el6.i686.rpm
     # copy installed-extensions boot-extensions
 
