@@ -18,13 +18,17 @@ interface_names = list(sysdb['interface']['config']['all'])
 def get(interface):
     if interface.startswith("Vlan"):
         return get_vlan(interface)
-    else:
+    elif interface.startswith("Ethernet"):
         return get_phy(interface)
+    elif interface.startswith("Port"):
+        return get_lag(interface)
+    else:
+        return {}
 
 def set(interface, enabled, description):
-    if enabled != None: 
+    if enabled != None:
         config(interface).enabled = enabled
-    if description != None: 
+    if description != None:
         config(interface).description = description
 
 def as_json(if_list):
@@ -35,8 +39,22 @@ def as_json(if_list):
 
 
 def get_phy(interface):
-    STATUS_KEYS = ['addr', 'speed', 'duplex', 'mtu'] 
-    CONFIG_KEYS = ['enabled', 'description'] 
+    STATUS_KEYS = ['addr', 'speed', 'duplex', 'mtu']
+    CONFIG_KEYS = ['enabled', 'description']
+    ret = dict()
+    for k in STATUS_KEYS:
+        ret[k] = getattr(status(interface), k)
+
+    for k in CONFIG_KEYS:
+        ret[k] = getattr(config(interface), k)
+    ret['rates'] = get_counters(interface, 'rates')
+    ret['statistics'] = get_counters(interface, 'statistics')
+    ret['ethStatistics'] = get_counters(interface, 'ethStatistics')
+    return ret
+
+def get_lag(interface):
+    STATUS_KEYS = ['addr', 'speed', 'mtu']
+    CONFIG_KEYS = ['enabled', 'description']
     ret = dict()
     for k in STATUS_KEYS:
         ret[k] = getattr(status(interface), k)
@@ -51,7 +69,7 @@ def get_phy(interface):
 #
 # Get a list of values for an vlan interface
 def get_vlan(interface):
-    CONFIG_KEYS = ['enabled', 'description'] 
+    CONFIG_KEYS = ['enabled', 'description']
     ret = dict()
     for k in CONFIG_KEYS:
         ret[k] = getattr(config(interface), k)
@@ -83,15 +101,20 @@ def get_value(obj, attrName):
 def counters(interface):
     if interface.startswith("Vlan"):
         return sysdb['interface']['counter']['eth']['vlan'][interface]['current']
-    else:
+    elif interface.startswith("Ethernet"):
         return sysdb['interface']['counter']['eth']['phy'][interface]['current']
+    else:
+        return sysdb['interface']['counter']['eth']['lag'][interface]['current']
+
 
 def config(interface):
     if interface.startswith("Vlan"):
         return sysdb['interface']['config']['all'][interface]
-    else:
+    elif interface.startswith("Ethernet"):
         return sysdb['interface']['config']['eth']['phy'][interface]
- 
+    else
+        return sysdb['interface']['config']['eth']['lag'][interface]
+
 def status(interface):
     return sysdb['interface']['status']['all'][interface]
 
@@ -109,16 +132,16 @@ args = parser.parse_args()
 if args.get:
     if args.interface:
         if args.interface in interface_names:
-            as_json([args.interface]) 
+            as_json([args.interface])
         else:
             print >> sys.stderr,  "ERROR: No such interface %s"%args.interface
             sys.exit(1)
-    else: 
+    else:
         as_json(interface_names)
 elif args.set:
     if not args.interface : parser.print_help()
 
-    if args.interface in interface_names: 
+    if args.interface in interface_names:
     	set(args.interface, args.enable, args.description)
     else:
         print >> sys.stderr,  "ERROR: No such interface %s"%args.interface
