@@ -63,7 +63,6 @@ def get_lag(interface):
         ret[k] = getattr(config(interface), k)
     ret['rates'] = get_counters(interface, 'rates')
     ret['statistics'] = get_counters(interface, 'statistics')
-    ret['ethStatistics'] = get_counters(interface, 'ethStatistics')
     return ret
 
 #
@@ -112,7 +111,7 @@ def config(interface):
         return sysdb['interface']['config']['all'][interface]
     elif interface.startswith("Ethernet"):
         return sysdb['interface']['config']['eth']['phy'][interface]
-    else
+    else:
         return sysdb['interface']['config']['eth']['lag'][interface]
 
 def status(interface):
