@@ -20,6 +20,8 @@ def get(interface):
         return get_vlan(interface)
     elif interface.startswith("Ethernet"):
         return get_phy(interface)
+    elif interface.startswith("Management"):
+        return get_phy(interface)
     elif interface.startswith("Port"):
         return get_lag(interface)
     else:
