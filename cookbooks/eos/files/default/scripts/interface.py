@@ -104,6 +104,8 @@ def counters(interface):
         return sysdb['interface']['counter']['eth']['vlan'][interface]['current']
     elif interface.startswith("Ethernet"):
         return sysdb['interface']['counter']['eth']['phy'][interface]['current']
+    elif interface.startswith("Management"):
+        return sysdb['interface']['counter']['eth']['phy'][interface]['current']
     else:
         return sysdb['interface']['counter']['eth']['lag'][interface]['current']
 
@@ -112,6 +114,8 @@ def config(interface):
     if interface.startswith("Vlan"):
         return sysdb['interface']['config']['all'][interface]
     elif interface.startswith("Ethernet"):
+        return sysdb['interface']['config']['eth']['phy'][interface]
+    elif interface.startswith("Management"):
         return sysdb['interface']['config']['eth']['phy'][interface]
     else:
         return sysdb['interface']['config']['eth']['lag'][interface]
