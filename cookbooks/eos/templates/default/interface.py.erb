@@ -27,7 +27,7 @@ def get(interface):
 
 def set(interface, enabled, description):
     if enabled != None:
-        config(interface).enabled = enabled
+        config(interface).adminEnabled = enabled
     if description != None:
         config(interface).description = description
 
@@ -42,7 +42,7 @@ def as_json(if_list):
 
 def get_phy(interface):
     STATUS_KEYS = ['addr', 'speed', 'duplex', 'mtu']
-    CONFIG_KEYS = ['enabled', 'description']
+    CONFIG_KEYS = ['enabled', 'adminEnabled', 'description']
     ret = dict()
     for k in STATUS_KEYS:
         ret[k] = getattr(status(interface), k)
@@ -56,7 +56,7 @@ def get_phy(interface):
 
 def get_lag(interface):
     STATUS_KEYS = ['addr', 'speed', 'mtu']
-    CONFIG_KEYS = ['enabled', 'description']
+    CONFIG_KEYS = ['enabled', 'adminEnabled', 'description']
     ret = dict()
     for k in STATUS_KEYS:
         ret[k] = getattr(status(interface), k)
@@ -70,7 +70,7 @@ def get_lag(interface):
 #
 # Get a list of values for an vlan interface
 def get_vlan(interface):
-    CONFIG_KEYS = ['enabled', 'description']
+    CONFIG_KEYS = ['enabled', 'adminEnabled', 'description']
     ret = dict()
     for k in CONFIG_KEYS:
         ret[k] = getattr(config(interface), k)
