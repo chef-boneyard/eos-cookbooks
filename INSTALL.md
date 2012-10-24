@@ -8,11 +8,11 @@ run chef-client.
 
 Prerequisites
 -------------
-- You need a vEOS Image for VMware Fusion.  Ask Kevin or James if you
-  don't have it already.
+- You need a vEOS Image for VMware Fusion.
 - VMware Fusion installed
   You will need to know the IP subnet used for the `vmnet8` interface.
-  You can either use `ifconfig` or consult the vmware `dhcpd.conf` at
+  You can either use `ifconfig` when Fusion is running or consult the
+  vmware `dhcpd.conf` at
   `/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf`
 
 Configuration Information
@@ -30,13 +30,13 @@ address i.e. `192.168.181.101`.
 The vEOS image installs a switch configured with a management
 interface(`ma1`) and 4 ethernet interfaces (`et1-4`).
 
-EOS 101
---------
+EOS 101 for Chef admins
+-----------------------
 - EOS is based on Fedora Core 14.  Our EL6 packages work on it just
   fine.
 - vEOS reports that it runs a x86_86 kernel, but the userland
   consists of i686 packages.  tl;dr Install an i686 version of
-  cher onto it
+  chef onto it
 - EOS provides a default shell (`/usr/bin/Cli`) which looks similar
   to Cisco IOS.  This is what you get dropped into via ssh so
   unfortuanely scp won't work.
@@ -107,9 +107,10 @@ You can supply a hostname and IP address different from the defaults:
 
     Generate config file 'startup-config-103'
 
-To upload, from the EOS Cli
+To upload, from the EOS Cli, assuming your checkout of this repo is in
+~/eos-cookbooks
 
-    # scp james@192.168.181.1:~/oc/eos-cookbooks/startup-config-101 startup-config
+    # scp USERNAME@192.168.181.1:~/eos-cookbooks/startup-config-101 startup-config
     # copy startup-config running-config
 
 You should now be running the configuration you just uploaded.
@@ -130,17 +131,17 @@ be put into `/mnt/flash/scheduled/chef-client`.
 
 ### configure chef-client
 
-You need to upload a `client.rb` for the chef server (we used hosted
-chef) and the validator cert.
+You need to upload a `client.rb` for the chef server (This example uses hosted
+chef with a orgname of 'arista_demo') and the validator cert.
 
-    # scp james@192.168.181.1:~/Downloads/jc_arista-validator.pem /persist/local/chef
+    # scp USERNAME@192.168.181.1:~/Downloads/arista_demo-validator.pem /persist/local/chef
     # bash sudo -s mkdir -p /persist/local/chef
 
     # bash
     # sudo -s
     bash-4.1# cat > chef/client.rb
     hostname = `hostname -s`.chomp
-    orgname="jc_arista"
+    orgname="arista_demo"
     current_dir = File.dirname(__FILE__)
 
     log_level                :info
