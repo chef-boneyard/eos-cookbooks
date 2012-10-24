@@ -145,8 +145,9 @@ chef) and the validator cert.
 
     log_level                :info
     log_location             STDOUT
-    node_name                hostname
+    verbose_logging          false
     enable_reporting         false
+    node_name                hostname
     client_key               "#{current_dir}/#{hostname}.pem"
     validation_client_name   "#{orgname}-validator"
     validation_key           "#{current_dir}/#{orgname}-validator.pem"
