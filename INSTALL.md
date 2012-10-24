@@ -146,10 +146,11 @@ chef) and the validator cert.
     log_level                :info
     log_location             STDOUT
     node_name                hostname
+    enable_reporting         false
     client_key               "#{current_dir}/#{hostname}.pem"
     validation_client_name   "#{orgname}-validator"
     validation_key           "#{current_dir}/#{orgname}-validator.pem"
-    chef_server_url "https://api.opscode.com/organizations/#{orgname}"
+    chef_server_url          "https://api.opscode.com/organizations/#{orgname}"
     ^C
 
 ### Reload and check chef
