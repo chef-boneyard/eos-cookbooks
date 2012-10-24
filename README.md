@@ -21,7 +21,8 @@ Cookbooks
 ----
 There are two main cookbooks - `eos` and `eos_demo`.
 
-* eos
+# eos
+
 This contains ohai plugins for reporting eos-specific information such
 as that returned by `show version` under `node['eos']` and some
 information on configured interfaces under `node['sysdb']`.
@@ -29,7 +30,8 @@ information on configured interfaces under `node['sysdb']`.
 There is also a  wrapper script for the Sysdb python API that allows us
 to modify interface attributes (enabled/disabled and description).
 
-* eos_demo
+# eos_demo
+
 This has a sample recipe which can enable/disable the `Ethernet1`
 interface depending on the value of the attribute
 `node['eos_demo']['enabled']`.  This is set, by default, to `false` in
