@@ -10,7 +10,7 @@
       "plugin_path": "/persist/local/chef/plugins"
     },
     "eos_demo": {
-      "enabled": true
+      "enabled": false
     }
   },
   "override_attributes": {
