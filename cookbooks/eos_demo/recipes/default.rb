@@ -4,6 +4,13 @@
 #
 # Copyright 2012, Opscode, Inc
 #
+# handle first run to fill in sysdb
+ohai "reload_sysdb" do
+  action :reload
+  plugin "sysdb"
+  only_if { node['sysdb'].nil? or node['sysdb']['interface'].nil? }
+end
+
 
 if node['eos_demo']['enabled']
   eos_interface "Ethernet1" do
