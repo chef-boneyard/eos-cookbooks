@@ -18,14 +18,12 @@ interface_names = list(sysdb['interface']['config']['all'])
 def get(interface):
     if interface.startswith("Vlan"):
         return get_vlan(interface)
-    elif interface.startswith("Ethernet"):
-        return get_phy(interface)
-    elif interface.startswith("Management"):
+    elif interface.startswith("Ethernet") or interface.startswith("Management"):
         return get_phy(interface)
     elif interface.startswith("Port"):
         return get_lag(interface)
     else:
-        return {}
+        return none
 
 def set(interface, enabled, description):
     if enabled != None:
@@ -36,7 +34,9 @@ def set(interface, enabled, description):
 def as_json(if_list):
     all = dict()
     for interface in if_list:
-        all[interface] = get(interface)
+        detail = get(interface)
+        if detail is not None:
+            all[interface] = detail
     print json.dumps(all, indent=4, sort_keys=True)
 
 
@@ -102,9 +102,7 @@ def get_value(obj, attrName):
 def counters(interface):
     if interface.startswith("Vlan"):
         return sysdb['interface']['counter']['eth']['vlan'][interface]['current']
-    elif interface.startswith("Ethernet"):
-        return sysdb['interface']['counter']['eth']['phy'][interface]['current']
-    elif interface.startswith("Management"):
+    elif interface.startswith("Ethernet") or interface.startswith("Management"):
         return sysdb['interface']['counter']['eth']['phy'][interface]['current']
     else:
         return sysdb['interface']['counter']['eth']['lag'][interface]['current']
@@ -113,9 +111,7 @@ def counters(interface):
 def config(interface):
     if interface.startswith("Vlan"):
         return sysdb['interface']['config']['all'][interface]
-    elif interface.startswith("Ethernet"):
-        return sysdb['interface']['config']['eth']['phy'][interface]
-    elif interface.startswith("Management"):
+    elif interface.startswith("Ethernet") or interface.startswith("Management"):
         return sysdb['interface']['config']['eth']['phy'][interface]
     else:
         return sysdb['interface']['config']['eth']['lag'][interface]

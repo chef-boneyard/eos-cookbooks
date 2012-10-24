@@ -1,7 +1,7 @@
 
 
 action :enable do
-  if node['sysdb']['interface'][new_resource.name].nil?
+  unless has_interface?(new_resource.name)
     Chef::Log.error("No such interface #{new_resource.name}")
   end
 
@@ -19,7 +19,7 @@ action :enable do
 end
 
 action :disable do
-  if node['sysdb']['interface'][new_resource.name].nil?
+  unless has_interface?(new_resource.name)
     Chef::Log.error("No such interface #{new_resource.name}")
   end
   if enabled?(new_resource.name)
@@ -35,6 +35,15 @@ action :disable do
   end
 end
 
-def enabled?(interface)
-  node['sysdb']['interface'][interface]['enabled']
+def has_interface?(interface)
+  node.has_key?('sysdb') and node['sysdb'].has_key?('interface') and
+    not node['sysdb']['interface'].nil? and
+    node['sysdb']['interface'].has_key?(interface)
 end
+
+def enabled?(interface)
+    has_interface?(interface) and
+    node['sysdb']['interface'][interface].has_key?('enabled') and
+    node['sysdb']['interface'][interface]['enabled']
+end
+
