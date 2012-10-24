@@ -5,10 +5,10 @@
 # Copyright 2012, Opscode, Inc
 #
 # handle first run to fill in sysdb
-ohai "reload_sysdb" do
+ohai "reload_sysdb_firstboot" do
   action :reload
   plugin "sysdb"
-  only_if { node['sysdb'].nil? or node['sysdb']['interface'].nil? }
+  not_if { node.attribute?('sysdb')}
 end
 
 
